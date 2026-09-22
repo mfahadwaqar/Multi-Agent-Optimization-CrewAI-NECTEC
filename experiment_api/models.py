@@ -33,6 +33,22 @@ class ExperimentRequest(BaseModel):
         max_length=10,
     )
 
+    @field_validator("timestamp_column", "target_column")
+    @classmethod
+    def non_blank_column(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("column names cannot be blank")
+        return value
+
+    @field_validator("feature_columns")
+    @classmethod
+    def non_blank_features(cls, values: list[str]) -> list[str]:
+        cleaned = [value.strip() for value in values]
+        if any(not value for value in cleaned):
+            raise ValueError("feature column names cannot be blank")
+        return cleaned
+
     @field_validator("lags")
     @classmethod
     def positive_unique_lags(cls, values: list[int]) -> list[int]:

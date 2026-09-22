@@ -6,7 +6,14 @@ import urllib.error
 import urllib.request
 from typing import Any
 
-from crewai import BaseLLM
+try:
+    from crewai import BaseLLM
+except ImportError:
+    class BaseLLM:  # type: ignore[no-redef]
+        """Import-time fallback; agent execution still checks for CrewAI."""
+
+        def __init__(self, *args, **kwargs):
+            raise RuntimeError("CrewAI is not installed. Run: pip install -r requirements.txt")
 
 
 class OllamaCloudLLM(BaseLLM):

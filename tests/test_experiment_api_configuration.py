@@ -58,6 +58,12 @@ class ConfigurationTests(unittest.TestCase):
                 self.dataset,
             )
 
+    def test_rejects_blank_column_names(self):
+        with self.assertRaisesRegex(ValueError, "blank"):
+            ExperimentRequest(
+                dataset_id="abc123", timestamp_column=" ", target_column="level"
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

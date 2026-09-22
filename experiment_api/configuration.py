@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import re
+from pathlib import Path
 from typing import Any
+
+import pandas as pd
 
 from forecasting.models import model_specs
 
@@ -81,6 +84,23 @@ def build_forecast_config(
         "random_seed": request.random_seed,
         "models": _validated_models(request),
     }
+
+
+def validate_dataset_values(request: ExperimentRequest, dataset: dict[str, Any]) -> None:
+    """Validate configured semantic column types before queueing work."""
+    selected = [request.timestamp_column, request.target_column, *request.feature_columns]
+    try:
+        frame = pd.read_csv(Path(dataset["path"]), usecols=selected)
+    except ValueError:
+        # Column membership is reported consistently by build_forecast_config.
+        return
+    timestamps = frame[request.timestamp_column].dropna()
+    if timestamps.empty or pd.to_datetime(timestamps, errors="coerce", format="mixed").isna().any():
+        raise ValueError("Timestamp column must contain parseable timestamps")
+    for column in [request.target_column, *request.feature_columns]:
+        values = frame[column].dropna()
+        if values.empty or pd.to_numeric(values, errors="coerce").isna().any():
+            raise ValueError(f"Column '{column}' must contain numeric values")
 
 
 def build_manifest(

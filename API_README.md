@@ -72,6 +72,8 @@ Copy the returned `run_id`, then poll and retrieve results:
 ```powershell
 curl.exe "http://127.0.0.1:8000/experiments/RUN_ID"
 curl.exe "http://127.0.0.1:8000/experiments/RUN_ID/results"
+curl.exe "http://127.0.0.1:8000/experiments/RUN_ID/metrics"
+curl.exe "http://127.0.0.1:8000/experiments/RUN_ID/report"
 ```
 
 Local runs perform model selection, refit the winner, evaluate the untouched
@@ -115,6 +117,14 @@ metrics; it does not refit or download a final model.
 - `POST /experiments`
 - `GET /experiments/{run_id}`
 - `GET /experiments/{run_id}/results`
+- `GET /experiments/{run_id}/metrics`
+- `GET /experiments/{run_id}/report`
+
+Uploads are limited by `EXPERIMENT_API_MAX_UPLOAD_BYTES` and
+`EXPERIMENT_API_MAX_COLUMNS`. Duplicate or blank CSV headers, invalid timestamp
+values, non-numeric configured targets or features, unknown columns, unsafe
+model parameters and unconfigured SLURM submissions are rejected before
+execution.
 
 This is a localhost development service, not a public multi-user deployment.
 Add authentication, TLS, per-user quotas, malware scanning, and a durable job

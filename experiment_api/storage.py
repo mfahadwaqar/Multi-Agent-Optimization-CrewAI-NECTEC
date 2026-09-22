@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import csv
 import io
 import json
 import os
@@ -22,13 +23,19 @@ def _now() -> str:
 
 
 class JsonStore:
-    def __init__(self, root: Path, max_upload_bytes: int = 25 * 1024 * 1024):
+    def __init__(
+        self,
+        root: Path,
+        max_upload_bytes: int = 25 * 1024 * 1024,
+        max_columns: int = 500,
+    ):
         self.root = Path(root).resolve()
         self.datasets = self.root / "datasets"
         self.runs = self.root / "runs"
         self.datasets.mkdir(parents=True, exist_ok=True)
         self.runs.mkdir(parents=True, exist_ok=True)
         self.max_upload_bytes = int(max_upload_bytes)
+        self.max_columns = int(max_columns)
         self._lock = threading.RLock()
         self._recover_interrupted_runs()
 
@@ -62,6 +69,16 @@ class JsonStore:
             raise ValueError("CSV upload is empty")
         if len(content) > self.max_upload_bytes:
             raise ValueError(f"CSV exceeds the maximum upload size of {self.max_upload_bytes} bytes")
+        try:
+            header = next(csv.reader(io.StringIO(content.decode("utf-8-sig"))))
+        except (UnicodeDecodeError, csv.Error, StopIteration) as exc:
+            raise ValueError(f"CSV header could not be parsed: {exc}") from exc
+        if len(header) > self.max_columns:
+            raise ValueError(f"CSV exceeds the maximum of {self.max_columns} columns")
+        if any(not column.strip() for column in header):
+            raise ValueError("CSV column names cannot be blank")
+        if len(set(header)) != len(header):
+            raise ValueError("CSV column names must be unique")
         try:
             frame = pd.read_csv(io.BytesIO(content))
         except Exception as exc:
@@ -126,11 +143,24 @@ class JsonStore:
         self.update_run(run_id, result_path=str(path), status="completed")
         return path
 
+    def save_report(self, run_id: str, report: str) -> Path:
+        self.get_run(run_id)
+        path = self.runs / run_id / "report.md"
+        path.write_text(report, encoding="utf-8")
+        return path
+
     def get_result(self, run_id: str) -> dict[str, Any]:
         record = self.get_run(run_id)
         if not record.get("result_path"):
             raise RuntimeError("Experiment has no completed result")
         return self._read_json(Path(record["result_path"]))
+
+    def get_report(self, run_id: str) -> str:
+        self.get_run(run_id)
+        path = self.runs / run_id / "report.md"
+        if not path.is_file():
+            raise RuntimeError("Experiment has no completed report")
+        return path.read_text(encoding="utf-8")
 
     def _recover_interrupted_runs(self) -> None:
         for path in self.runs.glob("*/record.json"):

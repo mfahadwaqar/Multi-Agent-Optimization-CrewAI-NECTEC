@@ -33,6 +33,14 @@ class JsonStoreTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "maximum"):
                 store.save_dataset("data.csv", b"a,b\n123456789\n")
 
+    def test_upload_rejects_duplicate_or_excessive_columns(self):
+        with tempfile.TemporaryDirectory() as directory:
+            store = JsonStore(Path(directory), max_upload_bytes=1024, max_columns=3)
+            with self.assertRaisesRegex(ValueError, "unique"):
+                store.save_dataset("duplicate.csv", b"time,value,value\n2026-01-01,1,2\n")
+            with self.assertRaisesRegex(ValueError, "columns"):
+                store.save_dataset("wide.csv", b"a,b,c,d\n1,2,3,4\n")
+
     def test_interrupted_runs_are_marked_failed_on_restart(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

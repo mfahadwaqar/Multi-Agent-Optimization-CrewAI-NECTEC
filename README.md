@@ -6,7 +6,7 @@ This project provides reproducible machine-learning workflows for:
 - weather and water-level time-series forecasting;
 - optional CrewAI analysis through Ollama Cloud;
 - local or distributed model/fold evaluation through SLURM and Slurminade; and
-- a development REST API for uploading time-series CSV files and retrieving experiment results.
+- a REST API and stdio MCP server for uploading time-series CSV files and retrieving experiment results.
 
 The forecasting workflow uses chronological splitting, a horizon gap, expanding-window validation, causal lag/rolling features, and an untouched final test set. Raw observations are not sent to Ollama Cloud; agents receive only derived profiles, configuration choices and measured metrics.
 
@@ -43,12 +43,14 @@ All agents run sequentially through CrewAI and receive derived profiles and metr
 | `forecasting/` | Time-series loading, preprocessing, features, validation, models and reports |
 | `slurm/` | Deterministic distributed worker and local/SLURM dispatcher |
 | `experiment_api/` | Development FastAPI service for external users and agents |
+| `experiment_mcp/` | MCP tool adapter over the same experiment service |
 | `configs/` | Dataset, distributed-job and SLURM example configurations |
 | `data/thailand/` | Pathum Thani weather and water-level inputs used in the completed experiments |
 | `tests/` | Classification, forecasting, Thai-data, SLURM and API tests |
 | `forecast_main.py` | Direct forecasting command-line entry point |
 | `forecast_csv.py` | Generic entry point for a user-supplied time-series CSV |
 | `api_main.py` | REST API entry point |
+| `mcp_main.py` | MCP stdio server entry point |
 
 Generated `results/`, `artifacts/`, `api_data/`, virtual environments and `.env` files are intentionally ignored by Git.
 
@@ -197,9 +199,9 @@ python -c "import json; r=json.load(open('results/distributed/pathum-water-lanta
 
 Do not copy `.env` or cloud credentials to compute nodes. SLURM workers execute only deterministic forecasting jobs. More detail is available in [`SLURM_README.md`](SLURM_README.md).
 
-## Development REST API
+## REST API
 
-The API currently supports CSV upload/profile, asynchronous local forecasting, status polling, result retrieval, and a development SSH/SLURM adapter for LANTA.
+The API supports CSV upload/profile, asynchronous local forecasting, status polling, result retrieval, metrics, generated Markdown reports, and a constrained SSH/SLURM adapter for LANTA.
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
@@ -209,6 +211,35 @@ python api_main.py
 Open `http://127.0.0.1:8000/docs` for the interactive API interface. Local execution and automated endpoint tests are working. Direct API-to-LANTA submission remains a development feature and requires non-interactive SSH-key or SSH-agent authentication plus an existing LANTA checkout. It should not yet be exposed as a public service.
 
 See [`API_README.md`](API_README.md) for request examples, environment variables and current limitations.
+
+## MCP server for AI agents
+
+`mcp_main.py` exposes the same `ExperimentService` as MCP tools; it does not reimplement the forecasting pipeline. The server communicates over standard input/output and provides tools to register CSV text, inspect its derived profile, submit an experiment, check status, and retrieve results, metrics, or the generated report.
+
+Run it manually:
+
+```powershell
+python mcp_main.py --data-root api_data
+```
+
+Example client configuration (replace the absolute paths):
+
+```json
+{
+  "mcpServers": {
+    "crewai-forecasting": {
+      "command": "C:\\\\absolute\\\\path\\\\to\\\\CrewAI-rebuild\\\\.venv\\\\Scripts\\\\python.exe",
+      "args": [
+        "C:\\\\absolute\\\\path\\\\to\\\\CrewAI-rebuild\\\\mcp_main.py",
+        "--data-root",
+        "C:\\\\absolute\\\\path\\\\to\\\\CrewAI-rebuild\\\\api_data"
+      ]
+    }
+  }
+}
+```
+
+See [`MCP_README.md`](MCP_README.md) for the tool list, end-to-end flow, safety boundaries, and current compatibility status.
 
 ## Additional datasets
 
@@ -221,4 +252,6 @@ See [`API_README.md`](API_README.md) for request examples, environment variables
 - Classification, forecasting, Thai dataset adapters and local distributed execution are implemented.
 - The Pathum Thani weather and water-level manifests were successfully executed on LANTA.
 - Local and LANTA outputs were consistent within normal floating-point variation.
-- The REST API is under active development; its local workflow is tested, while live API-to-LANTA submission is the next integration test.
+- The REST API local workflow and MCP subprocess workflow are covered by automated integration tests.
+- Direct API-to-LANTA submission is implemented but still requires a live integration test using non-interactive SSH authentication.
+- The MCP transport is dependency-free protocol-compatible stdio and has been tested with a subprocess client; validation with the official Python MCP SDK remains pending.

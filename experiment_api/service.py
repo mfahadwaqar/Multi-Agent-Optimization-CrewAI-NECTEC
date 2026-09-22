@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any, Callable
 
-from .configuration import build_forecast_config
+from .configuration import build_forecast_config, validate_dataset_values
 from .executors import LantaExecutor, LocalExecutor
 from .models import ExperimentRequest
 from .storage import JsonStore
@@ -33,6 +33,9 @@ class ExperimentService:
     def submit(self, request: ExperimentRequest) -> dict[str, Any]:
         dataset = self.store.get_dataset(request.dataset_id)
         config = build_forecast_config(request, dataset)
+        validate_dataset_values(request, dataset)
+        if request.backend == "slurm" and self.lanta_executor is None:
+            raise RuntimeError("LANTA execution is not configured")
         record = self.store.create_run(request.backend, request.dataset_id, request.model_dump(mode="json"))
         config_path = self.store.runs / record["run_id"] / "config.json"
         config_path.write_text(json.dumps(config, indent=2), encoding="utf-8")
@@ -55,6 +58,16 @@ class ExperimentService:
                 if self.lanta_executor is None:
                     raise RuntimeError("LANTA execution is not configured")
                 result = self.lanta_executor.execute(request, dataset, run_id, run_directory)
+            summary = run_directory / "artifacts" / "summary.md"
+            if summary.is_file():
+                report = summary.read_text(encoding="utf-8")
+            else:
+                report = (
+                    f"# Experiment {run_id}\n\n"
+                    f"The {request.backend} experiment completed successfully. "
+                    "See the results and metrics endpoints for structured output.\n"
+                )
+            self.store.save_report(run_id, report)
             self.store.save_result(run_id, result)
         except Exception as exc:
             self.store.update_run(run_id, status="failed", error=f"{type(exc).__name__}: {exc}")
