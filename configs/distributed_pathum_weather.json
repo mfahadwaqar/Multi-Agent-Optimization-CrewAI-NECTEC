@@ -1,0 +1,17 @@
+{
+  "bundle_size": 1,
+  "jobs": [
+    {"job_id": "pathum-weather-persistence-fold-1", "runner": "forecasting", "dataset_id": "pathum_thani_temperature_1d", "configuration_id": "persistence", "fold_id": 1, "config_path": "configs/thailand_pathum_weather.json", "project_root": "."},
+    {"job_id": "pathum-weather-persistence-fold-2", "runner": "forecasting", "dataset_id": "pathum_thani_temperature_1d", "configuration_id": "persistence", "fold_id": 2, "config_path": "configs/thailand_pathum_weather.json", "project_root": "."},
+    {"job_id": "pathum-weather-persistence-fold-3", "runner": "forecasting", "dataset_id": "pathum_thani_temperature_1d", "configuration_id": "persistence", "fold_id": 3, "config_path": "configs/thailand_pathum_weather.json", "project_root": "."},
+    {"job_id": "pathum-weather-seasonal-naive-fold-1", "runner": "forecasting", "dataset_id": "pathum_thani_temperature_1d", "configuration_id": "seasonal_naive", "fold_id": 1, "config_path": "configs/thailand_pathum_weather.json", "project_root": "."},
+    {"job_id": "pathum-weather-seasonal-naive-fold-2", "runner": "forecasting", "dataset_id": "pathum_thani_temperature_1d", "configuration_id": "seasonal_naive", "fold_id": 2, "config_path": "configs/thailand_pathum_weather.json", "project_root": "."},
+    {"job_id": "pathum-weather-seasonal-naive-fold-3", "runner": "forecasting", "dataset_id": "pathum_thani_temperature_1d", "configuration_id": "seasonal_naive", "fold_id": 3, "config_path": "configs/thailand_pathum_weather.json", "project_root": "."},
+    {"job_id": "pathum-weather-ridge-fold-1", "runner": "forecasting", "dataset_id": "pathum_thani_temperature_1d", "configuration_id": "ridge", "fold_id": 1, "config_path": "configs/thailand_pathum_weather.json", "project_root": "."},
+    {"job_id": "pathum-weather-ridge-fold-2", "runner": "forecasting", "dataset_id": "pathum_thani_temperature_1d", "configuration_id": "ridge", "fold_id": 2, "config_path": "configs/thailand_pathum_weather.json", "project_root": "."},
+    {"job_id": "pathum-weather-ridge-fold-3", "runner": "forecasting", "dataset_id": "pathum_thani_temperature_1d", "configuration_id": "ridge", "fold_id": 3, "config_path": "configs/thailand_pathum_weather.json", "project_root": "."},
+    {"job_id": "pathum-weather-random-forest-fold-1", "runner": "forecasting", "dataset_id": "pathum_thani_temperature_1d", "configuration_id": "random_forest", "fold_id": 1, "config_path": "configs/thailand_pathum_weather.json", "project_root": "."},
+    {"job_id": "pathum-weather-random-forest-fold-2", "runner": "forecasting", "dataset_id": "pathum_thani_temperature_1d", "configuration_id": "random_forest", "fold_id": 2, "config_path": "configs/thailand_pathum_weather.json", "project_root": "."},
+    {"job_id": "pathum-weather-random-forest-fold-3", "runner": "forecasting", "dataset_id": "pathum_thani_temperature_1d", "configuration_id": "random_forest", "fold_id": 3, "config_path": "configs/thailand_pathum_weather.json", "project_root": "."}
+  ]
+}

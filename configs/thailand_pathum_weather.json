@@ -1,0 +1,38 @@
+{
+  "data": {
+    "source": "thai_csv",
+    "name": "pathum_thani_temperature_1d",
+    "path": "data/thailand/pathum_weather.csv",
+    "encodings": ["utf-8-sig", "utf-8", "cp874", "tis-620"],
+    "header_starts_with": "YEAR,DOY,",
+    "missing_values": [-999],
+    "timestamp_column": "timestamp",
+    "timestamp_from_year_day": {"year": "YEAR", "day_of_year": "DOY"},
+    "column_map": {
+      "T2M_MAX": "temperature_max_c",
+      "T2M_MIN": "temperature_min_c",
+      "PRECTOTCORR": "rainfall_mm",
+      "RH2M": "humidity_percent",
+      "WS2M": "wind_speed_m_s"
+    },
+    "target_column": "temperature_max_c",
+    "feature_columns": ["temperature_min_c", "rainfall_mm", "humidity_percent", "wind_speed_m_s"],
+    "frequency": "D",
+    "dayfirst": false,
+    "buddhist_year": false
+  },
+  "forecast": {
+    "horizon": 1,
+    "seasonality": 365,
+    "lags": [1, 2, 7, 14, 30, 365],
+    "rolling_windows": [7, 30, 90, 365],
+    "calendar_features": ["day_of_week", "day_of_year"]
+  },
+  "validation": {"folds": 3, "window_size": 90, "minimum_train_size": 730},
+  "test_fraction": 0.2,
+  "random_seed": 42,
+  "models": [
+    {"name": "ridge", "params": {"alpha": 1.0}},
+    {"name": "random_forest", "params": {"n_estimators": 150, "max_depth": 12, "min_samples_leaf": 3}}
+  ]
+}

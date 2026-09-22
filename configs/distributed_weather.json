@@ -1,0 +1,9 @@
+{
+  "bundle_size": 2,
+  "jobs": [
+    {"job_id": "weather-persistence-fold-1", "runner": "forecasting", "dataset_id": "jena_temperature_24h", "configuration_id": "persistence", "fold_id": 1, "config_path": "configs/weather_jena.json", "project_root": "."},
+    {"job_id": "weather-seasonal-fold-1", "runner": "forecasting", "dataset_id": "jena_temperature_24h", "configuration_id": "seasonal_naive", "fold_id": 1, "config_path": "configs/weather_jena.json", "project_root": "."},
+    {"job_id": "weather-ridge-fold-1", "runner": "forecasting", "dataset_id": "jena_temperature_24h", "configuration_id": "ridge", "fold_id": 1, "config_path": "configs/weather_jena.json", "project_root": "."},
+    {"job_id": "weather-random-forest-fold-1", "runner": "forecasting", "dataset_id": "jena_temperature_24h", "configuration_id": "random_forest", "fold_id": 1, "config_path": "configs/weather_jena.json", "project_root": "."}
+  ]
+}

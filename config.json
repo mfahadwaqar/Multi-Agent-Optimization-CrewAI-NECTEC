@@ -1,0 +1,25 @@
+{
+  "dataset": {
+    "source": "sklearn",
+    "name": "digits",
+    "path": null,
+    "target_column": null
+  },
+  "search_space": {
+    "layers": [[64], [128, 64]],
+    "activations": ["relu", "tanh"],
+    "optimizers": ["adam", "sgd"],
+    "learning_rates": [0.001, 0.0001],
+    "batch_sizes": [32, 64],
+    "epochs": [80]
+  },
+  "optimization": {
+    "iterations": 3,
+    "minimum_improvement": 0.0001
+  },
+  "training": {
+    "random_seed": 42,
+    "test_size": 0.2,
+    "validation_size": 0.2
+  }
+}

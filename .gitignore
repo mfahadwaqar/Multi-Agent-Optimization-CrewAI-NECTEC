@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+artifacts/
+results/
+.pytest_cache/
+data/jena.zip
+data/jena_climate_2009_2016.csv
+data/usgs_groundwater_*.csv
+api_data/
+.api-venv/
+configs/slurm_lanta.json
+lanta-results/
+docs/superpowers/
+.superpowers/

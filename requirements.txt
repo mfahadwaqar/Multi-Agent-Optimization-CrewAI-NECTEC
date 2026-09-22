@@ -1,0 +1,9 @@
+numpy
+pandas
+scikit-learn
+joblib
+python-dotenv
+crewai==1.15.20
+fastapi>=0.115,<1
+uvicorn>=0.30,<1
+python-multipart>=0.0.9,<1

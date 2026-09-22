@@ -1,0 +1,27 @@
+{
+  "data": {
+    "source": "jena",
+    "name": "jena_temperature_24h",
+    "path": "data/jena_climate_2009_2016.csv",
+    "separator": ",",
+    "timestamp_column": "Date Time",
+    "target_column": "T (degC)",
+    "feature_columns": ["p (mbar)", "rh (%)", "wv (m/s)"],
+    "frequency": "10min",
+    "dayfirst": true
+  },
+  "forecast": {
+    "horizon": 144,
+    "seasonality": 144,
+    "lags": [1, 6, 18, 144, 1008],
+    "rolling_windows": [6, 144, 1008],
+    "calendar_features": ["hour", "day_of_week", "day_of_year"]
+  },
+  "validation": {"folds": 3, "window_size": 1008, "minimum_train_size": 10000},
+  "test_fraction": 0.2,
+  "random_seed": 42,
+  "models": [
+    {"name": "ridge", "params": {"alpha": 1.0}},
+    {"name": "random_forest", "params": {"n_estimators": 150, "max_depth": 16, "min_samples_leaf": 3}}
+  ]
+}

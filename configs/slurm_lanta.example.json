@@ -1,0 +1,7 @@
+{
+  "partition": "compute",
+  "account": "YOUR_PROJECT_ACCOUNT",
+  "cpus_per_task": 2,
+  "mem": "8G",
+  "time": "01:00:00"
+}
