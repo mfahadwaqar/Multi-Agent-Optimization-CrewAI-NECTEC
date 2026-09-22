@@ -10,6 +10,32 @@ This project provides reproducible machine-learning workflows for:
 
 The forecasting workflow uses chronological splitting, a horizon gap, expanding-window validation, causal lag/rolling features, and an untouched final test set. Raw observations are not sent to Ollama Cloud; agents receive only derived profiles, configuration choices and measured metrics.
 
+## How the system works
+
+The machine-learning pipeline performs the measurable work: it reads the data, handles missing timestamps and values, builds leakage-safe features, trains registered models, compares them on validation periods, evaluates the selected model once on the held-out test period, and saves reproducible artifacts. CrewAI is an optional review and decision layer around that deterministic pipeline; the language-model agents do not replace training code and do not invent metrics.
+
+For classification, nine specialized agents are used across two stages:
+
+- **Dataset Analyst** summarizes the derived dataset profile and identifies quality risks.
+- **Feature Engineering Adviser** reviews preprocessing, missing data, encoding and leakage risks.
+- **Baseline Analyst** interprets measured baseline performance and establishes the score to beat.
+- **Neural Network Researcher** recommends an architecture appropriate for the dataset.
+- **Neural Network Optimizer** selects one allowed configuration using previous measured results.
+- **Experiment Engineer** checks that the proposed configuration is complete and executable.
+- **Model Selection Scientist** verifies that the winner was selected using validation evidence rather than test results.
+- **Experiment Critic** identifies weaknesses and limitations in the measured experiment.
+- **Experiment Reporter** converts the evidence into a short human-readable summary.
+
+For time-series forecasting, five agents review the completed deterministic experiment:
+
+- **Time-Series and Seasonality Analyst** checks frequency, horizon, gaps and plausible seasonal structure.
+- **Forecast Leakage Auditor** verifies that features and validation use only information available at prediction time.
+- **Forecast Model Analyst** compares walk-forward MAE, RMSE and MASE results.
+- **Weather and Water Forecast Critic** identifies limitations and useful follow-up experiments.
+- **Forecast Experiment Reporter** produces a concise plain-language account without changing the measured results.
+
+All agents run sequentially through CrewAI and receive derived profiles and metrics—not raw timestamp/value rows.
+
 ## Repository layout
 
 | Path | Purpose |
@@ -21,6 +47,7 @@ The forecasting workflow uses chronological splitting, a horizon gap, expanding-
 | `data/thailand/` | Pathum Thani weather and water-level inputs used in the completed experiments |
 | `tests/` | Classification, forecasting, Thai-data, SLURM and API tests |
 | `forecast_main.py` | Direct forecasting command-line entry point |
+| `forecast_csv.py` | Generic entry point for a user-supplied time-series CSV |
 | `api_main.py` | REST API entry point |
 
 Generated `results/`, `artifacts/`, `api_data/`, virtual environments and `.env` files are intentionally ignored by Git.
@@ -62,6 +89,44 @@ python -m slurm.distribution --manifest configs\distributed_pathum_water.json --
 ```
 
 Each aggregate is written to `results/distributed/<run-id>/aggregate.json`.
+
+## Run your own time-series dataset
+
+Prepared project datasets are optional. `forecast_csv.py` accepts any standard CSV containing:
+
+- one parseable timestamp column;
+- one numeric target column to predict; and
+- optionally, additional numeric feature columns.
+
+Rows may contain ordinary missing numeric values. The workflow sorts and regularizes timestamps, forward-fills model inputs causally, and drops rows whose future target label is unavailable. It does not currently encode free-text or categorical features; omit those columns or preprocess them before running.
+
+Example:
+
+```powershell
+python forecast_csv.py `
+  --data "data\my_province_timeseries.csv" `
+  --timestamp "timestamp" `
+  --target "water_level" `
+  --frequency "D" `
+  --horizon 1 `
+  --seasonality 7 `
+  --lags 1 2 7 14 `
+  --rolling-windows 7 30 `
+  --calendar-features day_of_week day_of_year `
+  --folds 3 `
+  --validation-size 30 `
+  --minimum-train-size 180
+```
+
+When `--features` is omitted, every other numeric column is selected automatically. To choose explicitly, add for example:
+
+```powershell
+--features rainfall temperature humidity
+```
+
+For hourly data use `--frequency H`; for ten-minute data use `--frequency 10min`. The dataset must contain enough chronological observations for the largest lag or rolling window, the validation folds and the final test split. Reduce those settings for a shorter dataset.
+
+The development API offers the same generic-dataset capability through CSV upload. See [`API_README.md`](API_README.md).
 
 ## Optional CrewAI review with Ollama Cloud
 
