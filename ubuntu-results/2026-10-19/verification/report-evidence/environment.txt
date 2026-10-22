@@ -1,0 +1,8 @@
+2026-10-19T13:28:48+07:00
+Linux 6.8.0-117-generic x86_64 GNU/Linux
+Python 3.12.15
+codex-cli 0.163.0
+3fbca3b672ed598333db33d2630b72bffe4ff3b0
+?? data/thailand/pathum_water_api.csv
+?? data/thailand/pathum_weather_api.csv
+?? verification/

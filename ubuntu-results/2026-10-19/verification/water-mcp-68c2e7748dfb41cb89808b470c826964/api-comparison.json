@@ -1,0 +1,32 @@
+{
+  "validation_mae": {
+    "api": 0.10452306582045724,
+    "mcp": 0.10452306582045724,
+    "matches": true
+  },
+  "validation_rmse": {
+    "api": 0.13900358554529652,
+    "mcp": 0.13900358554529652,
+    "matches": true
+  },
+  "validation_mase": {
+    "api": 0.7846758300751592,
+    "mcp": 0.7846758300751592,
+    "matches": true
+  },
+  "test_mae": {
+    "api": 0.09548609883731399,
+    "mcp": 0.09548609883731399,
+    "matches": true
+  },
+  "test_rmse": {
+    "api": 0.13418550745411306,
+    "mcp": 0.13418550745411306,
+    "matches": true
+  },
+  "test_mase": {
+    "api": 0.7172347783992824,
+    "mcp": 0.7172347783992824,
+    "matches": true
+  }
+}

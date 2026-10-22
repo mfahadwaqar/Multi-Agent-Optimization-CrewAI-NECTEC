@@ -1,0 +1,45 @@
+{
+  "data": {
+    "source": "csv",
+    "name": "api_db0643ae18784cfa8cb67578bc60049d",
+    "path": "/home/fahad/projects/CrewAI-rebuild/api_data/mcp-verification/datasets/db0643ae18784cfa8cb67578bc60049d/source.csv",
+    "timestamp_column": "timestamp",
+    "target_column": "water_level",
+    "feature_columns": [],
+    "frequency": "10min",
+    "dayfirst": false
+  },
+  "forecast": {
+    "horizon": 144,
+    "seasonality": 144,
+    "lags": [
+      1,
+      6,
+      144,
+      1008
+    ],
+    "rolling_windows": [
+      6,
+      144
+    ],
+    "calendar_features": [
+      "hour",
+      "day_of_week"
+    ]
+  },
+  "validation": {
+    "folds": 3,
+    "window_size": 1008,
+    "minimum_train_size": 10000
+  },
+  "test_fraction": 0.2,
+  "random_seed": 42,
+  "models": [
+    {
+      "name": "ridge",
+      "params": {
+        "alpha": 1.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "name": "api_db0643ae18784cfa8cb67578bc60049d",
+  "source": "csv",
+  "timestamp_column": "timestamp",
+  "target_column": "water_level",
+  "frequency": "10min",
+  "observed_rows": 284581,
+  "regularized_rows": 302665,
+  "start": "2018-11-20T15:20:00",
+  "end": "2024-08-22T11:20:00",
+  "invalid_timestamps": 0,
+  "duplicate_timestamps": 0,
+  "missing_timestamps": 18084,
+  "missing_values_by_column": {
+    "water_level": 18084
+  },
+  "causal_imputation": "forward fill for model inputs; missing future labels are dropped",
+  "horizon": 144,
+  "seasonality": 144,
+  "supervised_rows": 283468,
+  "model_features": [
+    "water_level_current",
+    "water_level_lag_1",
+    "water_level_lag_6",
+    "water_level_lag_144",
+    "water_level_lag_1008",
+    "water_level_rolling_mean_6",
+    "water_level_rolling_std_6",
+    "water_level_rolling_mean_144",
+    "water_level_rolling_std_144",
+    "hour_sin",
+    "hour_cos",
+    "weekday_sin",
+    "weekday_cos"
+  ],
+  "feature_count": 13,
+  "development_rows": 226630,
+  "test_rows": 56694,
+  "test_gap_rows": 144,
+  "test_start": "2023-07-19T01:20:00",
+  "seasonality_analysis_scope": "development period only",
+  "seasonality_analysis": {
+    "period": 144,
+    "lag_correlation": 0.9711875183642138,
+    "seasonal_naive_mae": 0.11746134294447443
+  }
+}

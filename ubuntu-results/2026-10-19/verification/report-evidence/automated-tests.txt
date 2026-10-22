@@ -1,0 +1,25 @@
+test_health_upload_profile_run_and_results (test_experiment_api.ExperimentApiTests.test_health_upload_profile_run_and_results) ... ok
+test_rejects_invalid_column_data_before_creating_a_run (test_experiment_api.ExperimentApiTests.test_rejects_invalid_column_data_before_creating_a_run) ... ok
+test_rejects_slurm_submission_when_lanta_is_not_configured (test_experiment_api.ExperimentApiTests.test_rejects_slurm_submission_when_lanta_is_not_configured) ... ok
+test_unknown_ids_and_unfinished_results_have_distinct_errors (test_experiment_api.ExperimentApiTests.test_unknown_ids_and_unfinished_results_have_distinct_errors) ... ok
+test_builds_existing_forecast_shape_and_manifest_per_model_fold (test_experiment_api_configuration.ConfigurationTests.test_builds_existing_forecast_shape_and_manifest_per_model_fold) ... ok
+test_rejects_blank_column_names (test_experiment_api_configuration.ConfigurationTests.test_rejects_blank_column_names) ... ok
+test_rejects_unknown_or_duplicate_columns (test_experiment_api_configuration.ConfigurationTests.test_rejects_unknown_or_duplicate_columns) ... ok
+test_lanta_executor_uses_argument_lists_and_retrieves_aggregate (test_experiment_api_executors.ExecutorTests.test_lanta_executor_uses_argument_lists_and_retrieves_aggregate) ... ok
+test_local_executor_delegates_with_isolated_output (test_experiment_api_executors.ExecutorTests.test_local_executor_delegates_with_isolated_output) ... ok
+test_interrupted_runs_are_marked_failed_on_restart (test_experiment_api_storage.JsonStoreTests.test_interrupted_runs_are_marked_failed_on_restart) ... ok
+test_lookup_rejects_non_generated_identifiers (test_experiment_api_storage.JsonStoreTests.test_lookup_rejects_non_generated_identifiers) ... ok
+test_upload_profiles_csv_and_never_uses_client_filename (test_experiment_api_storage.JsonStoreTests.test_upload_profiles_csv_and_never_uses_client_filename) ... ok
+test_upload_rejects_duplicate_or_excessive_columns (test_experiment_api_storage.JsonStoreTests.test_upload_rejects_duplicate_or_excessive_columns) ... ok
+test_upload_rejects_non_csv_empty_and_oversized_content (test_experiment_api_storage.JsonStoreTests.test_upload_rejects_non_csv_empty_and_oversized_content) ... ok
+test_register_and_profile_hide_server_paths_and_sanitize_name (test_experiment_mcp.ExperimentMcpToolTests.test_register_and_profile_hide_server_paths_and_sanitize_name) ... ok
+test_register_rejects_non_csv_and_oversized_content (test_experiment_mcp.ExperimentMcpToolTests.test_register_rejects_non_csv_and_oversized_content) ... ok
+test_slurm_submission_is_rejected_when_lanta_is_not_configured (test_experiment_mcp.ExperimentMcpToolTests.test_slurm_submission_is_rejected_when_lanta_is_not_configured) ... ok
+test_submit_status_results_metrics_and_report_reuse_service (test_experiment_mcp.ExperimentMcpToolTests.test_submit_status_results_metrics_and_report_reuse_service) ... ok
+test_unknown_and_unfinished_runs_have_safe_errors (test_experiment_mcp.ExperimentMcpToolTests.test_unknown_and_unfinished_runs_have_safe_errors) ... ok
+test_client_can_initialize_list_tools_and_call_upload (test_experiment_mcp_stdio.McpStdioIntegrationTests.test_client_can_initialize_list_tools_and_call_upload) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 1.224s
+
+OK

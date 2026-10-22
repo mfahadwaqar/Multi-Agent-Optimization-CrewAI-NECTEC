@@ -1,0 +1,9 @@
+{
+  "model": "ridge",
+  "validation_mae": 0.10452306582045724,
+  "validation_rmse": 0.13900358554529652,
+  "validation_mase": 0.7846758300751592,
+  "test_mae": 0.09548609883731399,
+  "test_rmse": 0.13418550745411306,
+  "test_mase": 0.7172347783992824
+}

@@ -1,0 +1,18 @@
+{
+  "dataset_id": "db0643ae18784cfa8cb67578bc60049d",
+  "original_filename": "pathum_water_api.csv",
+  "row_count": 284581,
+  "columns": [
+    "timestamp",
+    "water_level"
+  ],
+  "dtypes": {
+    "timestamp": "str",
+    "water_level": "float64"
+  },
+  "missing_values": {
+    "timestamp": 0,
+    "water_level": 0
+  },
+  "created_at": "2026-10-19T06:01:01.243000+00:00"
+}
